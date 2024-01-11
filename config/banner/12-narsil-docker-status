@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+#
+# Narsil (Ubuntu) - Security hardening tool
+# Seaton Jiang <hi@seatonjiang.com>
+#
+# The latest version of Narsil can be found at:
+# https://github.com/seatonjiang/narsil-ubuntu
+#
+# Licensed under the MIT license:
+# https://github.com/seatonjiang/narsil-ubuntu/blob/main/LICENSE
+#
+
+export LC_ALL=C.UTF-8
+
+set -u -o pipefail
+
+# Colors
+G="\033[01;32m"
+R="\033[01;31m"
+N="\033[0m"
+
+if netstat -anp | grep docker >/dev/null 2>&1; then
+    mapfile -t containers < <(docker ps --format '{{.Names}}\t{{.Status}}' | sort -k1 | awk '{ print $1,$2 }')
+
+    OUTPUT=""
+    for i in "${!containers[@]}"; do
+        IFS=" " read -r NAME STATUS <<< "${containers[i]}"
+
+        # Green if the service is active, red otherwise
+        if [[ "${STATUS}" == "Up" ]]; then
+            OUTPUT+="${NAME}:,${G}${STATUS,,}${N},"
+        else
+            OUTPUT+="${NAME}:,${R}${STATUS,,}${N},"
+        fi
+
+        # Insert \n every 3 columns
+        if [ $((("$i"+1) % 3)) -eq 0 ]; then
+            OUTPUT+="\n"
+        fi
+    done
+    OUTPUT+="\n"
+
+    echo -e "  [Docker Status]\n"
+    echo -ne "${OUTPUT}" | column -ts $',' | sed -e 's/^/  /'
+    echo
+fi

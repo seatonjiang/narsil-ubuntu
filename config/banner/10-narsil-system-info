@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+# Narsil (Ubuntu) - Security hardening tool
+# Seaton Jiang <hi@seatonjiang.com>
+#
+# The latest version of Narsil can be found at:
+# https://github.com/seatonjiang/narsil-ubuntu
+#
+# Licensed under the MIT license:
+# https://github.com/seatonjiang/narsil-ubuntu/blob/main/LICENSE
+#
+
+export LC_ALL=C.UTF-8
+
+set -u -o pipefail
+
+# Get load averages
+LOAD1=$(grep "" /proc/loadavg | awk '{print $1}')
+LOAD5=$(grep "" /proc/loadavg | awk '{print $2}')
+LOAD15=$(grep "" /proc/loadavg | awk '{print $3}')
+
+# Get free memory
+MEMORY_USED=$(free -t -m | grep "Mem" | awk '{print $3}')
+MEMORY_ALL=$(free -t -m | grep "Mem" | awk '{print $2}')
+MEMORY_PERCENTAGE=$(free | awk '/Mem/{printf("%.2f%"), $3/$2*100}')
+
+# Get system uptime
+UPTIME=$(grep "" /proc/uptime | cut -f1 -d.)
+UPTIME_DAYS=$(("${UPTIME}"/60/60/24))
+UPTIME_HOURS=$(("${UPTIME}"/60/60%24))
+UPTIME_MINS=$(("${UPTIME}"/60%60))
+UPTIME_SECS=$(("${UPTIME}"%60))
+
+# Get processes
+PROCESS=$(ps -eo user=|sort|uniq -c | awk '{print $2 " " $1 }')
+PROCESS_ALL=$(echo "${PROCESS}" | awk '{print $2}' | awk '{SUM += $1} END {print SUM}')
+PROCESS_ROOT=$(echo "${PROCESS}" | grep root | awk '{print $2}')
+PROCESS_USER=$(echo "${PROCESS}" | grep -v root | awk '{print $2}' | awk '{SUM += $1} END {print SUM}')
+
+# Get processors
+PROCESSOR_NAME=$(grep "model name" /proc/cpuinfo | cut -d ' ' -f3- | awk '{print $0}' | head -1)
+PROCESSOR_COUNT=$(grep -ioP 'processor\t:' /proc/cpuinfo | wc -l)
+
+# Colors
+G="\033[01;32m"
+N="\033[0m"
+
+echo -e "  [System Info]\n"
+echo -e "  SYSTEM    : $(awk -F'[="]+' '/DESCRIPTION/{print $2}' /etc/lsb-release)"
+echo -e "  KERNEL    : $(uname -sr)"
+echo -e "  UPTIME    : ${UPTIME_DAYS} days ${UPTIME_HOURS} hours ${UPTIME_MINS} minutes ${UPTIME_SECS} seconds"
+echo -e "  CPU       : ${PROCESSOR_NAME} (${G}${PROCESSOR_COUNT}${N} vCPU)\n"
+echo -e "  MEMORY    : ${MEMORY_USED} MB / ${MEMORY_ALL} MB (${G}${MEMORY_PERCENTAGE}${N} Used)"
+echo -e "  LOAD AVG  : ${G}${LOAD1}${N} (1m), ${G}${LOAD5}${N} (5m), ${G}${LOAD15}${N} (15m)"
+echo -e "  PROCESSES : ${G}${PROCESS_ROOT}${N} (root), ${G}${PROCESS_USER}${N} (user), ${G}${PROCESS_ALL}${N} (total)"
+echo -e "  USERS     : ${G}$(users | wc -w)${N} users logged in\n"

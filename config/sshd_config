@@ -1,0 +1,81 @@
+# ============================== Manual config =============================
+
+#Port 22
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+
+# Listen to IPv4
+AddressFamily inet
+
+# Disable root login
+PermitRootLogin no
+
+# Only authentication methods with publickey are allowed
+#AuthenticationMethods publickey
+
+# Password login
+#PasswordAuthentication no
+
+# Limit SSH Access to Certain Users
+#AllowUsers ubuntu
+
+# Limit SSH Access to Certain Groups
+#AllowGroups ubuntu
+
+# ==========================================================================
+
+# LogLevel VERBOSE logs user's key fingerprint on login.
+LogLevel VERBOSE
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+# Limit the maximum number of authentication attempts
+MaxAuthTries 3
+
+# Set a reduced login grace period
+LoginGraceTime 20
+
+# Disable other authentication methods
+ChallengeResponseAuthentication no
+KerberosAuthentication no
+GSSAPIAuthentication no
+
+# PAM authentication enabled to make password authentication available
+UsePAM yes
+
+# Override default of no subsystems
+Subsystem sftp internal-sftp
+
+# Disable X11 forwarding
+X11Forwarding no
+
+# Disable reverse DNS lookups
+UseDNS no
+
+# Disable authentication with empty passwords
+PermitEmptyPasswords no
+
+# Disable several miscellaneous options
+AllowAgentForwarding no
+AllowTcpForwarding no
+
+# let ClientAliveInterval handle keepalive
+TCPKeepAlive no
+
+# allow a maximum of two multiplexed sessions over a single TCP connection
+MaxSessions 3
+
+# send a keepalive message to the client when the session has been idle for 180 seconds
+ClientAliveInterval 180
+
+# number of client alive messages sent without client responding
+ClientAliveCountMax 3
+
+# prevent Unix-domain socket forwarding
+AllowStreamLocalForwarding no
+
+# Use SSH Protocol 2
+Protocol 2
+
+Include /etc/ssh/sshd_config.d/*.conf

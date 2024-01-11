@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Narsil (Ubuntu) - Security hardening tool
+# Seaton Jiang <hi@seatonjiang.com>
+#
+# The latest version of Narsil can be found at:
+# https://github.com/seatonjiang/narsil-ubuntu
+#
+# Licensed under the MIT license:
+# https://github.com/seatonjiang/narsil-ubuntu/blob/main/LICENSE
+#
+
+export LC_ALL=C.UTF-8
+
+set -u -o pipefail
+
+# Colors
+G="\033[01;32m"
+N="\033[0m"
+
+echo -e "\nYou are logged in to ${G}$(uname -n)${N}. System information as of $(/bin/date "+%Y-%m-%d %H:%M:%S")\n"

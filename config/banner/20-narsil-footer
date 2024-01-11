@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Narsil (Ubuntu) - Security hardening tool
+# Seaton Jiang <hi@seatonjiang.com>
+#
+# The latest version of Narsil can be found at:
+# https://github.com/seatonjiang/narsil-ubuntu
+#
+# Licensed under the MIT license:
+# https://github.com/seatonjiang/narsil-ubuntu/blob/main/LICENSE
+#
+
+export LC_ALL=C.UTF-8
+
+set -u -o pipefail
+
+# Color
+R="\033[01;31m"
+N="\033[0m"
+
+echo -e "This server is used for ${R}production${N}, please pay attention to the operation specification.\n"

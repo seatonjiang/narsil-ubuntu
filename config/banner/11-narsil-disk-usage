@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+# Narsil (Ubuntu) - Security hardening tool
+# Seaton Jiang <hi@seatonjiang.com>
+#
+# The latest version of Narsil can be found at:
+# https://github.com/seatonjiang/narsil-ubuntu
+#
+# Licensed under the MIT license:
+# https://github.com/seatonjiang/narsil-ubuntu/blob/main/LICENSE
+#
+
+export LC_ALL=C.UTF-8
+
+set -u -o pipefail
+
+mapfile -t DFH < <(df -h -x zfs -x squashfs -x tmpfs -x devtmpfs -x overlay --output=target,pcent,size,used | tail -n+2)
+
+# Colors
+G="\033[01;32m"
+R="\033[01;31m"
+D="\033[39m\033[2m"
+N="\033[0m"
+
+echo -e "  [Disk Usage]\n"
+
+for LINE in "${DFH[@]}"; do
+    # Get disk usage
+    DISK_USAGE=$(echo "${LINE}" | awk '{print $2}' | sed 's/%//')
+    USAGE_WIDTH=$((("${DISK_USAGE}"*60)/100))
+
+    # If the usage rate is <90%, the color is green, otherwise it is red
+    if [ "${DISK_USAGE}" -gt 90 ]; then
+        COLOR="${R}"
+    else
+        COLOR="${G}"
+    fi
+
+    # Print the used width
+    BAR="[${COLOR}"
+    for ((i=0; i<"${USAGE_WIDTH}"; i++)); do
+        BAR+="="
+    done
+
+    # Print unused width
+    BAR+=${D}
+    for ((i="${USAGE_WIDTH}"; i<60; i++)); do
+        BAR+="="
+    done
+    BAR+="${N}]"
+
+    # Output
+    echo "${LINE}" | awk '{ printf("Mounted: %-32s %s / %s (%s Used)\n", $1, $4, $3, $2); }' | sed -e 's/^/  /'
+    echo -e "${BAR}" | sed -e 's/^/  /'
+done
+echo
