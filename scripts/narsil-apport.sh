@@ -22,7 +22,7 @@ function narsil_apport()
         if [[ ${VERIFY^^} == 'Y' ]]; then
             msg_notic '\n%s\n' "• Service Status"
             systemctl status apport.service --no-pager
-            msg_notic '\n%s\n' "• File Content:  /etc/default/apport"
+            msg_notic '\n%s\n' "• File Content: /etc/default/apport"
             grep enabled /etc/default/apport
         else
             msg_succ '%s\n' "Complete!"
