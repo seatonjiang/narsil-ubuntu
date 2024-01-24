@@ -18,7 +18,7 @@ function narsil_docker()
     local DOCKER_HUB
 
     DOCKER_CE='https://mirrors.cloud.tencent.com/docker-ce'
-    DOCKER_HUB='https://hub-mirror.c.163.com'
+    DOCKER_HUB='https://hub.c.163.com'
 
     if [ "${DOCKER_CE}" != "${DOCKER_CE_REPO}" ]; then
         DOCKER_CE=${DOCKER_CE_REPO}
@@ -55,7 +55,19 @@ function narsil_docker()
     apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
     mkdir -p /etc/docker
-    echo "{\"registry-mirrors\":[\"${DOCKER_HUB}\"]}" > /etc/docker/daemon.json
+
+    {
+        echo '{'
+        echo '  "registry-mirrors": ['
+        echo "    \"${DOCKER_HUB}\""
+        echo '  ],'
+        echo '  "log-driver": "json-file",'
+        echo '  "log-opts": {'
+        echo '    "max-size": "50m",'
+        echo '    "max-file": "7"'
+        echo '  }'
+        echo '}'
+    } > /etc/docker/daemon.json
 
     systemctl restart docker.service
     systemctl enable docker.service
