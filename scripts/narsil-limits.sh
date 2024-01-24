@@ -24,7 +24,7 @@ function narsil_limits()
             echo '* hard nproc  unlimited'
             echo '* soft core   unlimited'
             echo '* hard core   unlimited'
-        } > /etc/security/limits.conf
+        } >> /etc/security/limits.conf
     fi
 
     if [[ ${VERIFY^^} == 'Y' ]]; then
