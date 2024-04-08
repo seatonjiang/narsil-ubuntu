@@ -12,7 +12,7 @@
 
 function narsil_hostname()
 {
-    local NEW_HOSTNAME
+    local NEW_HOSTNAME='Ubuntu'
 
     if [[ ${METADATA^^} == 'Y' ]]; then
         if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
