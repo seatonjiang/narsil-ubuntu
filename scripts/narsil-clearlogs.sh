@@ -28,7 +28,9 @@ function narsil_clearlogs()
     systemctl restart systemd-journald.service
 
     # /var/cache/fontconfig/
-    find /var/cache/fontconfig -type f -delete
+    if [ -d /var/cache/fontconfig ]; then
+        find /var/cache/fontconfig -type f -delete
+    fi
 
     # /var/backups/
     find /var/backups -type f -delete
