@@ -14,6 +14,8 @@ function narsil_tcpbbr()
 {
     msg_info '\n%s\n' "[${STATS}] Enable TCP BBR"
 
+    VERIFY=${VERIFY:-'Y'}
+
     if ! sysctl net.ipv4.tcp_available_congestion_control | grep -q bbr; then
         {
             echo -e '\n# Controls the use of TCP BBR'

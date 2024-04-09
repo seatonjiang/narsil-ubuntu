@@ -14,6 +14,8 @@ function narsil_useradd()
 {
     msg_info '\n%s\n' "[${STATS}] Optimize useradd policy"
 
+    VERIFY=${VERIFY:-'Y'}
+
     # When creating a new user, login is disabled by default, so use `usermod -s /bin/bash user` to change the shell
     sed -i 's/SHELL=.*/SHELL=\/bin\/false/' /etc/default/useradd
 

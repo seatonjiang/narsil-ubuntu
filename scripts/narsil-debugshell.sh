@@ -14,6 +14,8 @@ function narsil_debugshell()
 {
     msg_info '\n%s\n' "[${STATS}] Disable debug-shell service"
 
+    VERIFY=${VERIFY:-'Y'}
+
     systemctl stop debug-shell.service
     systemctl mask -f debug-shell.service >/dev/null 2>&1
 

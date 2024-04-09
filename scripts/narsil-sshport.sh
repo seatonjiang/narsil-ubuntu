@@ -20,8 +20,6 @@ function narsil_sshport()
     # Install netstat
     dnf install -y net-tools >/dev/null 2>&1
 
-    local OLD_SSH_PORT
-
     OLD_SSH_PORT=$( grep ^Port /etc/ssh/sshd_config | awk '{print $2}' | head -1 )
 
     if [ -z "${OLD_SSH_PORT}" ];then

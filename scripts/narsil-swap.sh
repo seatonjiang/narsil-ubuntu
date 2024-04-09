@@ -14,9 +14,6 @@ function narsil_swap()
 {
     msg_notic '\n%s\n' "Swap space is being added, please wait..."
 
-    local MEMORY
-    local MEMORY_LEVEL
-
     MEMORY=$(free -m | awk '/Mem:/{print $2}')
 
     if [ "${MEMORY}" -le 1280 ]; then

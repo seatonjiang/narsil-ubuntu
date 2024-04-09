@@ -14,6 +14,8 @@ function narsil_banner()
 {
     msg_info '\n%s\n' "[${STATS}] Add login banner (system info, disk usage and docker status)"
 
+    PROD_TIPS=${PROD_TIPS:-'Y'}
+
     # Disable motd-news
     sed -i 's/ENABLED=.*/ENABLED=0/' /etc/default/motd-news
     systemctl stop motd-news.timer

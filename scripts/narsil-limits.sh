@@ -14,6 +14,8 @@ function narsil_limits()
 {
     msg_info '\n%s\n' "[${STATS}] Config ulimit for high concurrency situations"
 
+    VERIFY=${VERIFY:-'Y'}
+
     if ! grep -qnri "# Narsil Limits Config" /etc/security/limits.conf; then
         sed -i 's/^# End of file*//' /etc/security/limits.conf
         {

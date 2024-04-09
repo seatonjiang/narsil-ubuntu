@@ -14,6 +14,8 @@ function narsil_logindefs()
 {
     msg_info '\n%s\n' "[${STATS}] Change user login policy"
 
+    VERIFY=${VERIFY:-'Y'}
+
     # Password can be used for a maximum of 30 days
     sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS 30/' /etc/login.defs
     # 1 day between password changes

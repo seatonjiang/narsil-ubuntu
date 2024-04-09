@@ -14,6 +14,9 @@ function narsil_sshdconfig()
 {
     msg_info '\n%s\n' "[${STATS}] Config OpenSSH (Some configurations need to be done manually)"
 
+    SSH_PORT=${SSH_PORT:-'22'}
+    VERIFY=${VERIFY:-'Y'}
+
     cp /etc/ssh/sshd_config /etc/ssh/sshd_config-"$(date +%Y%m%d-%s)".bak
     cp ./config/sshd_config /etc/ssh/sshd_config
     sed -i "s/.*Port.*/Port ${SSH_PORT}/" /etc/ssh/sshd_config

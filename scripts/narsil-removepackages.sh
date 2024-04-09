@@ -14,11 +14,7 @@ function narsil_removepackages()
 {
     msg_info '\n%s\n' "[${STATS}] Remove useless packages"
 
-    local REMOVE_PACKAGE
-
     REMOVE_PACKAGE="open-vm-tools popularity-contest"
-
-    local PACKAGE
 
     for PACKAGE in ${REMOVE_PACKAGE}; do
         apt-get purge "${PACKAGE}" -y >/dev/null 2>&1

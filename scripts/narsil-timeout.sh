@@ -14,6 +14,8 @@ function narsil_timeout()
 {
     msg_info '\n%s\n' "[${STATS}] Set system timeout to auto logout"
 
+    VERIFY=${VERIFY:-'Y'}
+
     if ! grep -nqri "TMOUT" /etc/profile.d/; then
         echo "export TMOUT=180" > /etc/profile.d/auto-logout.sh
         echo "readonly TMOUT" >> /etc/profile.d/auto-logout.sh

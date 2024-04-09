@@ -14,6 +14,8 @@ function narsil_apport()
 {
     msg_info '\n%s\n' "[${STATS}] Disable Apport service"
 
+    VERIFY=${VERIFY:-'Y'}
+
     if [ -f /etc/default/apport ]; then
         sed -i 's/enabled=.*/enabled=0/' /etc/default/apport
         systemctl stop apport.service

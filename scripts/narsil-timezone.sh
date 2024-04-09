@@ -14,6 +14,9 @@ function narsil_timezone()
 {
     msg_info '\n%s\n' "[${STATS}] Config system time zone"
 
+    VERIFY=${VERIFY:-'Y'}
+    TIME_ZONE=${TIME_ZONE:-'Asia/Shanghai'}
+
     timedatectl set-timezone "${TIME_ZONE}"
     timedatectl set-local-rtc 0
 

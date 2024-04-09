@@ -14,6 +14,8 @@ function narsil_ctrlaltdel()
 {
     msg_info '\n%s\n' "[${STATS}] Disable Ctrl-Alt-Delete target"
 
+    VERIFY=${VERIFY:-'Y'}
+
     systemctl stop ctrl-alt-del.target
     systemctl mask -f ctrl-alt-del.target >/dev/null 2>&1
 
