@@ -1,3 +1,13 @@
+#
+# Narsil (Ubuntu) - Security hardening tool
+# Seaton Jiang <hi@seatonjiang.com>
+#
+# The latest version of Narsil can be found at:
+# https://github.com/seatonjiang/narsil-ubuntu
+#
+# Licensed under the MIT license:
+# https://github.com/seatonjiang/narsil-ubuntu/blob/main/LICENSE
+#
 # ============================== Manual config =============================
 
 #Port 22
