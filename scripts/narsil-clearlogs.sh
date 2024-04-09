@@ -23,17 +23,15 @@ function narsil_clearlogs()
         true > "${logfiles}"
     done < <(find /var/log/ -type f ! -name 'narsil-*' -print0)
 
-    # /var/log/journal/
-    rm -rf /var/log/journal/*
-    systemctl restart systemd-journald.service
-
     # /var/cache/fontconfig/
     if [ -d /var/cache/fontconfig ]; then
         find /var/cache/fontconfig -type f -delete
     fi
 
     # /var/backups/
-    find /var/backups -type f -delete
+    if [ -d /var/backups ]; then
+        find /var/backups -type f -delete
+    fi
 
     apt-get autoclean -y >/dev/null 2>&1
     apt-get autoremove -y >/dev/null 2>&1
