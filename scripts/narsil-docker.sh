@@ -14,29 +14,21 @@ function narsil_docker()
 {
     msg_notic '\n%s\n\n' "Docker Engine is installing, please wait..."
 
-    local DOCKER_CE
-    local DOCKER_HUB
-
-    DOCKER_CE='https://mirrors.cloud.tencent.com/docker-ce'
-    DOCKER_HUB='https://hub.c.163.com'
-
-    if [ "${DOCKER_CE}" != "${DOCKER_CE_REPO}" ]; then
-        DOCKER_CE=${DOCKER_CE_REPO}
-    fi
-
-    if [ "${DOCKER_HUB}" != "${DOCKER_HUB_MIRRORS}" ]; then
-        DOCKER_HUB=${DOCKER_HUB_MIRRORS}
-    fi
+    DOCKER_CE_REPO=${DOCKER_CE_REPO:-'https://mirrors.cloud.tencent.com/docker-ce'}
+    DOCKER_HUB_MIRRORS=${DOCKER_HUB_MIRRORS:-'https://hub.c.163.com'}
+    VERIFY=${VERIFY:-'Y'}
 
     if [[ ${METADATA^^} == 'Y' ]]; then
         if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
-            DOCKER_HUB='https://mirror.ccs.tencentyun.com'
+            DOCKER_CE_REPO='https://mirrors.cloud.tencent.com/docker-ce'
+            DOCKER_HUB_MIRRORS='https://mirror.ccs.tencentyun.com'
+          elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+            DOCKER_CE_REPO='http://mirrors.cloud.aliyuncs.com/docker-ce'
+            DOCKER_HUB_MIRRORS='https://narsil.mirror.aliyuncs.com'
         fi
     fi
 
     # Uninstall Docker Engine
-    local PKG
-
     for PKG in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do
         apt-get remove "{$PKG}" -y >/dev/null 2>&1;
     done
@@ -45,10 +37,10 @@ function narsil_docker()
 
     # Install Dependencies
     apt-get install apt-transport-https ca-certificates curl gnupg lsb-release -y
-    curl -fsSL "${DOCKER_CE}"/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
+    curl -fsSL "${DOCKER_CE_REPO}"/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
 
     # Add Software Repositories
-    echo "deb [arch=$(dpkg --print-architecture)] ${DOCKER_CE}/linux/ubuntu $(lsb_release -cs) stable" >> /etc/apt/sources.list.d/docker.list
+    echo "deb [arch=$(dpkg --print-architecture)] ${DOCKER_CE_REPO}/linux/ubuntu $(lsb_release -cs) stable" >> /etc/apt/sources.list.d/docker.list
 
     # Install Docker
     apt-get update
@@ -59,7 +51,7 @@ function narsil_docker()
     {
         echo '{'
         echo '  "registry-mirrors": ['
-        echo "    \"${DOCKER_HUB}\""
+        echo "    \"${DOCKER_HUB_MIRRORS}\""
         echo '  ],'
         echo '  "log-driver": "json-file",'
         echo '  "log-opts": {'

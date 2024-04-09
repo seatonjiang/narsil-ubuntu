@@ -14,17 +14,15 @@ function narsil_dnsserver()
 {
     msg_info '\n%s\n' "[${STATS}] Change DNS Server"
 
-    local NEW_DNSSERVER
-
-    NEW_DNSSERVER='119.29.29.29 223.5.5.5'
-
-    if [ "${NEW_DNSSERVER}" != "${DNS_SERVER}" ]; then
-        NEW_DNSSERVER=${DNS_SERVER}
-    fi
+    VERIFY=${VERIFY:-'Y'}
+    METADATA=${METADATA:-'Y'}
+    DNS_SERVER=${DNS_SERVER:-'119.29.29.29 223.5.5.5'}
 
     if [[ ${METADATA^^} == 'Y' ]]; then
         if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
-            NEW_DNSSERVER='183.60.83.19 183.60.82.98'
+            DNS_SERVER='183.60.83.19 183.60.82.98'
+        elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+            DNS_SERVER='100.100.2.136 100.100.2.138'
         fi
     fi
 
@@ -38,7 +36,7 @@ function narsil_dnsserver()
 
     find /etc/resolv.conf -delete
 
-    for NAMESERVER in ${NEW_DNSSERVER}; do
+    for NAMESERVER in ${DNS_SERVER}; do
         echo "nameserver ${NAMESERVER}" >> /etc/resolv.conf
     done
 

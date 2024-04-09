@@ -14,6 +14,10 @@ function narsil_ntpserver()
 {
     msg_info '\n%s\n' "[${STATS}] Change NTP Server"
 
+    VERIFY=${VERIFY:-'Y'}
+    METADATA=${METADATA:-'Y'}
+    NTP_SERVER=${NTP_SERVER:-'ntp1.tencent.com ntp2.tencent.com ntp3.tencent.com ntp4.tencent.com ntp5.tencent.com'}
+
     systemctl stop systemd-timesyncd
     systemctl mask systemd-timesyncd >/dev/null 2>&1
 
@@ -23,23 +27,15 @@ function narsil_ntpserver()
 
     cp ./config/chrony.conf /etc/chrony/chrony.conf
 
-    local NEW_NTPSERVER
-
-    NEW_NTPSERVER='ntp1.tencent.com ntp2.tencent.com ntp3.tencent.com ntp4.tencent.com ntp5.tencent.com'
-
-    if [ "${NEW_NTPSERVER}" != "${NTP_SERVER}" ]; then
-        NEW_NTPSERVER=${NTP_SERVER}
-    fi
-
     if [[ ${METADATA^^} == 'Y' ]]; then
         if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
-            NEW_NTPSERVER='time1.tencentyun.com time2.tencentyun.com time3.tencentyun.com time4.tencentyun.com time5.tencentyun.com'
+            NTP_SERVER='time1.tencentyun.com time2.tencentyun.com time3.tencentyun.com time4.tencentyun.com time5.tencentyun.com'
+        elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+            NTP_SERVER='ntp7.cloud.aliyuncs.com ntp8.cloud.aliyuncs.com ntp9.cloud.aliyuncs.com ntp10.cloud.aliyuncs.com ntp11.cloud.aliyuncs.com'
         fi
     fi
 
-    local SERVER
-
-    for SERVER in ${NEW_NTPSERVER}; do
+    for SERVER in ${NTP_SERVER}; do
         echo "server ${SERVER} iburst" >> /etc/chrony/chrony.conf
     done
 

@@ -57,7 +57,7 @@ function narsil_fdisk()
     msg_succ '%s\n' "Success, the mount is completed!"
 
     msg_notic '\n%s\n' "[5] Write the config to /etc/fstab and mount the device"
-    if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
+    if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ] || [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
         SDISK=$(echo "${DISK}" | grep -o "/dev/.*vd[b-z]" | awk -F"/" '{print $(NF)}')
         SOFTLINK=$(ls -l /dev/disk/by-id | grep "${SDISK}1" | awk -F" " '{print $(NF-2)}')
         sed -i "/${SOFTLINK}/d" /etc/fstab

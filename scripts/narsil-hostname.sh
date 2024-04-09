@@ -12,37 +12,37 @@
 
 function narsil_hostname()
 {
-    local NEW_HOSTNAME='Ubuntu'
+    HOSTNAME=${HOSTNAME:-'Ubuntu'}
+    METADATA=${METADATA:-'Y'}
 
     if [[ ${METADATA^^} == 'Y' ]]; then
         if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
-            NEW_HOSTNAME=$(wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/instance-name)
+            HOSTNAME=$(wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/instance-name)
+          elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+            HOSTNAME=$(wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/instance/instance-name)
         fi
     fi
 
-    if [ "${NEW_HOSTNAME}" == "未命名" ]; then
-        NEW_HOSTNAME='Ubuntu'
+    if [ "${HOSTNAME}" == "未命名" ]; then
+        HOSTNAME='Ubuntu'
     fi
 
-    if [ 'Ubuntu' != "${HOSTNAME}" ]; then
-        NEW_HOSTNAME=${HOSTNAME}
-    fi
-
-    msg_notic '\n%s' "Please enter new hostname [Default: ${NEW_HOSTNAME}]: "
+    msg_notic '\n%s' "Please enter new hostname [Default: ${HOSTNAME}]: "
 
     while :; do
         read -r GET_HOSTNAME
-        GET_HOSTNAME=${GET_HOSTNAME:-"${NEW_HOSTNAME}"}
+        NEW_HOSTNAME=${GET_HOSTNAME:-"${HOSTNAME}"}
         break
     done
 
-    local OLD_HOSTNAME
-
     OLD_HOSTNAME=$(hostname)
 
-    hostnamectl set-hostname --static "${GET_HOSTNAME}"
-    sed -i "s@${OLD_HOSTNAME}@${GET_HOSTNAME}@g" /etc/hosts
-    sed -i '/update_hostname/d' /etc/cloud/cloud.cfg
+    hostnamectl set-hostname --static "${NEW_HOSTNAME}"
+    sed -i "s@${OLD_HOSTNAME}@${NEW_HOSTNAME}@g" /etc/hosts
+
+    if [ -f /etc/cloud/cloud.cfg ]; then
+        sed -i '/update_hostname/d' /etc/cloud/cloud.cfg
+    fi
 
     msg_succ '\n%s\n\n' "Hostname has been changed successfully!"
 
