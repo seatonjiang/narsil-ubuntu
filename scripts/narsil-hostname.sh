@@ -18,7 +18,7 @@ function narsil_hostname()
     if [[ ${METADATA^^} == 'Y' ]]; then
         if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
             HOSTNAME=$(wget -qO- -t1 -T2 metadata.tencentyun.com/latest/meta-data/instance-name)
-          elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+        elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
             HOSTNAME=$(wget -qO- -t1 -T2 100.100.100.200/latest/meta-data/instance/instance-name)
         fi
     fi

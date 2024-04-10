@@ -22,7 +22,7 @@ function narsil_docker()
         if [ -n "$(wget -qO- -t1 -T2 metadata.tencentyun.com)" ]; then
             DOCKER_CE_REPO='https://mirrors.cloud.tencent.com/docker-ce'
             DOCKER_HUB_MIRRORS='https://mirror.ccs.tencentyun.com'
-          elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+        elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
             DOCKER_CE_REPO='http://mirrors.cloud.aliyuncs.com/docker-ce'
             DOCKER_HUB_MIRRORS='https://narsil.mirror.aliyuncs.com'
         fi
