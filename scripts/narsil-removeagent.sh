@@ -19,6 +19,10 @@ function narsil_removeagent()
         /usr/local/qcloud/stargate/admin/uninstall.sh >/dev/null 2>&1
         /usr/local/qcloud/YunJing/uninst.sh >/dev/null 2>&1
         ./config/tat-agent-uninstall.sh >/dev/null 2>&1
+    elif [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+        /usr/local/cloudmonitor/cloudmonitorCtl.sh stop >/dev/null 2>&1
+        /usr/local/cloudmonitor/cloudmonitorCtl.sh uninstall >/dev/null 2>&1
+        rm -rf /usr/local/cloudmonitor >/dev/null 2>&1
     fi
 
     msg_succ '%s\n\n' "All monitoring components have been uninstalled!"
