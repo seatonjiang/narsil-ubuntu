@@ -15,6 +15,7 @@ function narsil_banner()
     msg_info '\n%s\n' "[${STATS}] Add login banner (system info, disk usage and docker status)"
 
     PROD_TIPS=${PROD_TIPS:-'Y'}
+    METADATA=${METADATA:-'Y'}
 
     # Disable motd-news
     sed -i 's/ENABLED=.*/ENABLED=0/' /etc/default/motd-news
@@ -23,6 +24,12 @@ function narsil_banner()
 
     # Remove defualt motd
     rm -rf /etc/update-motd.d/*
+
+    if [[ ${METADATA^^} == 'Y' ]]; then
+        if [ -n "$(wget -qO- -t1 -T2 100.100.100.200)" ]; then
+            find /etc/motd -type f -delete
+        fi
+    fi
 
     cp ./config/banner/*-narsil-* /etc/update-motd.d/
     chmod +x /etc/update-motd.d/*-narsil-*
