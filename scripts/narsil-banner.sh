@@ -31,6 +31,8 @@ function narsil_banner()
     cp ./config/banner/*-narsil-* /etc/update-motd.d/
     chmod +x /etc/update-motd.d/*-narsil-*
 
+    apt-get install net-tools -y >/dev/null 2>&1
+
     if [[ ${PROD_TIPS^^} != 'Y' ]]; then
         chmod -x /etc/update-motd.d/20-aegis-footer
     fi
