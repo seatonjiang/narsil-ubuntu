@@ -80,6 +80,9 @@ METADATA='Y'
 # Production Environment Reminder
 PROD_TIPS='Y'
 
+# Auto logout time (Unit: second)
+LOGOUT_TIME='180'
+
 # SSH Port Config
 SSH_PORT='22'
 
@@ -97,7 +100,7 @@ NTP_SERVER='ntp1.tencent.com ntp2.tencent.com ntp3.tencent.com ntp4.tencent.com 
 
 # Docker Config
 DOCKER_CE_REPO='https://mirrors.cloud.tencent.com/docker-ce'
-DOCKER_HUB_MIRRORS='https://hub-mirror.c.163.com'
+DOCKER_HUB_MIRRORS='https://hub.c.163.com'
 ```
 
 ## 📂 Structure

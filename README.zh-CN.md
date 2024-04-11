@@ -83,6 +83,9 @@ METADATA='Y'
 # 在 banner 中添加生产环境的提示
 PROD_TIPS='Y'
 
+# 无响应注销时间 (单位：秒)
+LOGOUT_TIME='180'
+
 # SSH 端口配置
 SSH_PORT='22'
 
